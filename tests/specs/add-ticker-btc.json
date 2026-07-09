@@ -3,17 +3,18 @@
     "name": "Add Bitcoin",
     "steps": [
       {
+        "send": {
+          "callback": "add_ticker:BTC",
+          "userId": 1
+        },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Add BTC to watchlist with default settings"
+              "text": "✅ BTC added to your watchlist with default settings."
             }
           }
-        ],
-        "send": {
-          "callback": "add_ticker:BTC"
-        }
+        ]
       }
     ]
   }

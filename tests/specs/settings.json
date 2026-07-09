@@ -1,0 +1,35 @@
+[
+  {
+    "name": "Settings menu when summary off",
+    "steps": [
+      {
+        "send": { "callback": "settings:menu", "userId": 8 },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "⚙️ Settings:\nMorning summary: off"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Set morning summary time",
+    "steps": [
+      {
+        "send": { "callback": "settings:summary:set", "userId": 9 },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "What time should the daily summary arrive? Enter a time like 08:00 or 8am." } }
+        ]
+      },
+      {
+        "send": { "text": "08:00", "userId": 9 },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "✅ Morning summary set for 08:00 daily. You'll get a price digest each morning." } }
+        ]
+      }
+    ]
+  }
+]
