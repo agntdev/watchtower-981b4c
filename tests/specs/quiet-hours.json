@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Quiet hours menu when off",
+    "steps": [
+      {
+        "send": { "callback": "quiet:menu", "userId": 6 },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "🌙 Quiet hours are off. Set a window to pause alerts while you sleep."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Set quiet hours flow",
+    "steps": [
+      {
+        "send": { "callback": "quiet:set", "userId": 7 },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "When should quiet hours start? Enter a time like 22:00 or 10pm." } }
+        ]
+      },
+      {
+        "send": { "text": "22:00", "userId": 7 },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "Got it — quiet hours start at 22:00. When should they end?" } }
+        ]
+      },
+      {
+        "send": { "text": "07:00", "userId": 7 },
+        "expect": [
+          { "method": "sendMessage", "payload": { "text": "✅ Quiet hours set: 22:00 – 07:00. Alerts will be deferred during this window." } }
+        ]
+      }
+    ]
+  }
+]

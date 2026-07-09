@@ -1,17 +1,37 @@
 import { Composer } from "grammy";
+import type { Ctx } from "../bot.js";
+import { inlineButton, inlineKeyboard } from "../toolkit/index.js";
+import { getOrCreateUser } from "./start.js";
 
-// SCAFFOLD — generated from the bot blueprint BEFORE the agent runs.
-// Keep a LIVE registration (.command / .callbackQuery / …) so this feature is
-// never an empty stub. Replace the reply body with real logic + copy; if you
-// change the user-facing text, update tests/specs to match EXACTLY.
-// Do NOT rewrite src/bot.ts — buildBot() already auto-loads this module.
-// Menu: wire this into /start via registerMainMenuItem({ label: "Add Bitcoin", data: "add_ticker:BTC" }) if the toolkit exposes it.
-
-const composer = new Composer();
+const composer = new Composer<Ctx>();
 
 composer.callbackQuery("add_ticker:BTC", async (ctx) => {
   await ctx.answerCallbackQuery();
-  await ctx.reply("Add BTC to watchlist with default settings");
+  const userId = ctx.from?.id;
+  if (!userId) return;
+
+  const profile = await getOrCreateUser(userId);
+  if (profile.watchlist["BTC"]) {
+    await ctx.reply("BTC is already on your watchlist.", {
+      reply_markup: inlineKeyboard([
+        [inlineButton("📋 View watchlist", "view_watchlist")],
+        [inlineButton("⬅️ Back to menu", "menu:main")],
+      ]),
+    });
+    return;
+  }
+
+  profile.watchlist["BTC"] = { added_at: Date.now() };
+  const { storeSet } = await import("../storage.js");
+  await storeSet(`user:${userId}`, profile);
+
+  await ctx.reply("✅ BTC added to your watchlist with default settings.", {
+    reply_markup: inlineKeyboard([
+      [inlineButton("💰 Check price", "price:BTC")],
+      [inlineButton("🔔 Set alert", "set_threshold:BTC")],
+      [inlineButton("⬅️ Back to menu", "menu:main")],
+    ]),
+  });
 });
 
 export default composer;

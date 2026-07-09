@@ -1,19 +1,17 @@
 [
   {
-    "name": "/price",
+    "name": "/price with empty watchlist",
     "steps": [
       {
+        "send": { "text": "/price", "userId": 11 },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Request current price of specified or all tracked tickers"
+              "text": "Your watchlist is empty — add some coins to track prices."
             }
           }
-        ],
-        "send": {
-          "text": "/price"
-        }
+        ]
       }
     ]
   }

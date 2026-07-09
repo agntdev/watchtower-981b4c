@@ -1,19 +1,17 @@
 [
   {
-    "name": "View list",
+    "name": "View watchlist when empty",
     "steps": [
       {
+        "send": { "callback": "view_watchlist", "userId": 10 },
         "expect": [
           {
             "method": "sendMessage",
             "payload": {
-              "text": "Display current watchlist with management options"
+              "text": "No coins on your watchlist yet — tap ➕ Add Bitcoin to start."
             }
           }
-        ],
-        "send": {
-          "callback": "view_watchlist"
-        }
+        ]
       }
     ]
   }
